@@ -261,6 +261,35 @@ CREATE TABLE pagos (
     FOREIGN KEY (anio_escolar_id) REFERENCES anios_escolares(id)
 );
 
+-- ==================== HORARIOS ====================
+CREATE TABLE horarios (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    asignacion_id INT NOT NULL,
+    dia ENUM('LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO') NOT NULL,
+    hora_inicio TIME NOT NULL,
+    hora_fin TIME NOT NULL,
+    aula VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (asignacion_id) REFERENCES asignaciones_profesor(id) ON DELETE CASCADE,
+    UNIQUE KEY (asignacion_id, dia, hora_inicio)
+);
+
+-- ==================== COMUNICADOS ====================
+CREATE TABLE comunicados (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    titulo VARCHAR(200) NOT NULL,
+    contenido TEXT NOT NULL,
+    tipo ENUM('GENERAL', 'NIVEL', 'GRADO', 'SECCION') DEFAULT 'GENERAL',
+    destinatario_id INT,
+    fecha_publicacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_expiracion DATE,
+    activo BOOLEAN DEFAULT TRUE,
+    usuario_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
 -- ==================== ÍNDICES ====================
 CREATE INDEX idx_estudiantes_codigo ON estudiantes(codigo);
 CREATE INDEX idx_estudiantes_dni ON estudiantes(dni);
@@ -269,3 +298,5 @@ CREATE INDEX idx_asistencias_fecha ON asistencias(fecha);
 CREATE INDEX idx_notas_periodo ON notas(periodo_id);
 CREATE INDEX idx_pagos_estado ON pagos(estado);
 CREATE INDEX idx_pagos_mes ON pagos(mes);
+CREATE INDEX idx_horarios_dia ON horarios(dia);
+CREATE INDEX idx_comunicados_fecha ON comunicados(fecha_publicacion);

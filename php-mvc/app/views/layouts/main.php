@@ -62,6 +62,10 @@
                                 <a class="dropdown-item" href="<?= APP_URL ?>/apoderados">
                                     <i class="ti ti-users-group me-1"></i>Apoderados
                                 </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/matriculas">
+                                    <i class="ti ti-file-certificate me-1"></i>Matrículas
+                                </a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -95,6 +99,22 @@
                                     Reporte Mensual
                                 </a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= APP_URL ?>/horarios">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-calendar-time"></i>
+                                </span>
+                                <span class="nav-link-title">Horarios</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= APP_URL ?>/comunicados">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-speakerphone"></i>
+                                </span>
+                                <span class="nav-link-title">Comunicados</span>
+                            </a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#navbar-pagos" data-bs-toggle="dropdown" role="button" aria-expanded="false">
@@ -136,6 +156,9 @@
                                 </a>
                                 <a class="dropdown-item" href="<?= APP_URL ?>/docentes">
                                     <i class="ti ti-chalkboard me-1"></i>Docentes
+                                </a>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/asignaciones">
+                                    <i class="ti ti-link me-1"></i>Asignaciones
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <span class="dropdown-header">Configuración Académica</span>
@@ -185,7 +208,16 @@
                                 <?= $title ?? 'Dashboard' ?>
                             </h2>
                         </div>
-                        <div class="col-auto ms-auto">
+                        <div class="col-auto ms-auto d-flex align-items-center">
+                            <!-- Búsqueda global -->
+                            <form action="<?= APP_URL ?>/buscar" method="GET" class="d-none d-md-block me-3">
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <i class="ti ti-search"></i>
+                                    </span>
+                                    <input type="text" name="q" class="form-control form-control-sm" placeholder="Buscar..." style="width: 200px;">
+                                </div>
+                            </form>
                             <div class="d-flex align-items-center">
                                 <span class="avatar avatar-sm bg-primary-lt me-2">
                                     <i class="ti ti-user"></i>
