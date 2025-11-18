@@ -1,3 +1,5 @@
+<?php $secciones = $data['secciones'] ?? []; ?>
+
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="page-pretitle">Gestión</div>

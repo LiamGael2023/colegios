@@ -71,4 +71,11 @@ class Controller {
     public function getQuery($key, $default = '') {
         return isset($_GET[$key]) ? htmlspecialchars(trim($_GET[$key])) : $default;
     }
+
+    /**
+     * Alias para getQuery
+     */
+    public function getGet($key, $default = '') {
+        return $this->getQuery($key, $default);
+    }
 }
