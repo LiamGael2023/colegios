@@ -1,32 +1,48 @@
 <?php $est = $data['estudiante']; ?>
 
-<div class="mb-4">
-    <a href="<?= APP_URL ?>/estudiantes/ver/<?= $est->id ?>" class="text-decoration-none">
-        <i class="bi bi-arrow-left"></i> Volver
-    </a>
+<div class="page-header d-print-none mb-4">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <a href="<?= APP_URL ?>/estudiantes/ver/<?= $est->id ?>" class="btn btn-link px-0">
+                <i class="ti ti-arrow-left me-1"></i> Volver
+            </a>
+        </div>
+    </div>
 </div>
 
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">Matricular Estudiante</h5>
+                <h3 class="card-title">
+                    <i class="ti ti-certificate me-2"></i>Matricular Estudiante
+                </h3>
             </div>
             <div class="card-body">
                 <div class="alert alert-info">
-                    <strong>Estudiante:</strong> <?= $est->apellido_paterno ?> <?= $est->apellido_materno ?>, <?= $est->nombres ?>
-                    <br>
-                    <strong>Año Escolar:</strong> <?= $data['anioActivo']->anio ?>
+                    <div class="d-flex">
+                        <div><i class="ti ti-info-circle me-2"></i></div>
+                        <div>
+                            <h4 class="alert-title">Información de Matrícula</h4>
+                            <div class="text-muted">
+                                <strong>Estudiante:</strong> <?= $est->apellido_paterno ?> <?= $est->apellido_materno ?>, <?= $est->nombres ?>
+                                <br>
+                                <strong>Año Escolar:</strong> <?= $data['anioActivo']->anio ?>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <?php if (!empty($data['error'])): ?>
-                    <div class="alert alert-danger"><?= $data['error'] ?></div>
+                    <div class="alert alert-danger">
+                        <i class="ti ti-alert-circle me-2"></i><?= $data['error'] ?>
+                    </div>
                 <?php endif; ?>
 
-                <form method="POST">
+                <form method="POST" autocomplete="off">
                     <div class="row g-3">
                         <div class="col-md-12">
-                            <label class="form-label">Sección *</label>
+                            <label class="form-label required">Sección</label>
                             <select name="seccion_id" class="form-select" required>
                                 <option value="">Seleccionar sección...</option>
                                 <?php foreach ($data['secciones'] as $sec): ?>
@@ -50,10 +66,19 @@
                         </div>
                     </div>
 
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-lg"></i> Confirmar Matrícula
-                        </button>
+                    <div class="card-footer bg-transparent mt-3 px-0">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <a href="<?= APP_URL ?>/estudiantes/ver/<?= $est->id ?>" class="btn btn-link">
+                                    Cancelar
+                                </a>
+                            </div>
+                            <div class="col-auto ms-auto">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="ti ti-check me-1"></i> Confirmar Matrícula
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

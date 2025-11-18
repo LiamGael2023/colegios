@@ -1,31 +1,47 @@
 <?php $est = $data['estudiante']; ?>
 
-<div class="mb-4">
-    <a href="<?= APP_URL ?>/estudiantes/ver/<?= $est->id ?>" class="text-decoration-none">
-        <i class="bi bi-arrow-left"></i> Volver
-    </a>
+<div class="page-header d-print-none mb-4">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <a href="<?= APP_URL ?>/estudiantes/ver/<?= $est->id ?>" class="btn btn-link px-0">
+                <i class="ti ti-arrow-left me-1"></i> Volver
+            </a>
+        </div>
+    </div>
 </div>
 
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">Generar Cuotas de Pago</h5>
+                <h3 class="card-title">
+                    <i class="ti ti-receipt me-2"></i>Generar Cuotas de Pago
+                </h3>
             </div>
             <div class="card-body">
                 <div class="alert alert-info">
-                    <strong>Estudiante:</strong> <?= $est->apellido_paterno ?> <?= $est->apellido_materno ?>, <?= $est->nombres ?>
-                    <br>
-                    <strong>Año Escolar:</strong> <?= $data['anioActivo']->anio ?>
+                    <div class="d-flex">
+                        <div><i class="ti ti-info-circle me-2"></i></div>
+                        <div>
+                            <h4 class="alert-title">Información del Estudiante</h4>
+                            <div class="text-muted">
+                                <strong>Estudiante:</strong> <?= $est->apellido_paterno ?> <?= $est->apellido_materno ?>, <?= $est->nombres ?>
+                                <br>
+                                <strong>Año Escolar:</strong> <?= $data['anioActivo']->anio ?>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <?php if (!empty($data['error'])): ?>
-                    <div class="alert alert-danger"><?= $data['error'] ?></div>
+                    <div class="alert alert-danger">
+                        <i class="ti ti-alert-circle me-2"></i><?= $data['error'] ?>
+                    </div>
                 <?php endif; ?>
 
-                <form method="POST">
+                <form method="POST" autocomplete="off">
                     <div class="mb-3">
-                        <label class="form-label">Concepto de Pago *</label>
+                        <label class="form-label required">Concepto de Pago</label>
                         <select name="concepto_id" class="form-select" required>
                             <option value="">Seleccionar...</option>
                             <?php foreach ($data['conceptos'] as $concepto): ?>
@@ -37,7 +53,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Meses a Generar *</label>
+                        <label class="form-label required">Meses a Generar</label>
                         <div class="row g-2">
                             <?php
                             $meses = ['Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -45,26 +61,24 @@
                                 $num = $i + 3;
                             ?>
                                 <div class="col-md-3">
-                                    <div class="form-check">
+                                    <label class="form-check">
                                         <input class="form-check-input" type="checkbox" name="meses[]"
-                                               value="<?= $num ?>" id="mes_<?= $num ?>">
-                                        <label class="form-check-label" for="mes_<?= $num ?>">
-                                            <?= $mes ?>
-                                        </label>
-                                    </div>
+                                               value="<?= $num ?>">
+                                        <span class="form-check-label"><?= $mes ?></span>
+                                    </label>
                                 </div>
                             <?php endforeach; ?>
                         </div>
                         <div class="mt-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="seleccionarTodos()">
-                                Seleccionar todos
+                            <button type="button" class="btn btn-sm" onclick="seleccionarTodos()">
+                                <i class="ti ti-checks me-1"></i> Seleccionar todos
                             </button>
                         </div>
                     </div>
 
-                    <div class="mt-4">
+                    <div class="card-footer bg-transparent px-0">
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-plus-lg"></i> Generar Cuotas
+                            <i class="ti ti-plus me-1"></i> Generar Cuotas
                         </button>
                     </div>
                 </form>

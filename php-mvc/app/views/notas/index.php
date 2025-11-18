@@ -1,6 +1,8 @@
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0">Seleccionar Sección y Curso</h5>
+        <h3 class="card-title">
+            <i class="ti ti-notebook me-2"></i>Seleccionar Sección y Curso
+        </h3>
     </div>
     <div class="card-body">
         <form id="formNotas" method="GET" action="<?= APP_URL ?>/notas/registrar">
@@ -42,7 +44,7 @@
                 </div>
                 <div class="col-md-1 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-arrow-right"></i>
+                        <i class="ti ti-arrow-right"></i>
                     </button>
                 </div>
             </div>

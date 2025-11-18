@@ -1,6 +1,8 @@
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0">Seleccionar Sección</h5>
+        <h3 class="card-title">
+            <i class="ti ti-calendar-check me-2"></i>Seleccionar Sección
+        </h3>
     </div>
     <div class="card-body">
         <form id="formAsistencia" method="GET" action="<?= APP_URL ?>/asistencia/registrar">
@@ -32,7 +34,7 @@
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-arrow-right"></i> Continuar
+                        <i class="ti ti-arrow-right me-1"></i> Continuar
                     </button>
                 </div>
             </div>

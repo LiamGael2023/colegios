@@ -1,32 +1,40 @@
 <?php $est = $data['estudiante']; ?>
 
-<div class="mb-4">
-    <a href="<?= APP_URL ?>/estudiantes/ver/<?= $est->id ?>" class="text-decoration-none">
-        <i class="bi bi-arrow-left"></i> Volver
-    </a>
+<div class="page-header d-print-none mb-4">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <a href="<?= APP_URL ?>/estudiantes/ver/<?= $est->id ?>" class="btn btn-link px-0">
+                <i class="ti ti-arrow-left me-1"></i> Volver
+            </a>
+        </div>
+    </div>
 </div>
 
 <div class="card">
     <div class="card-header">
-        <h5 class="mb-0">Editar Estudiante</h5>
+        <h3 class="card-title">
+            <i class="ti ti-edit me-2"></i>Editar Estudiante
+        </h3>
     </div>
     <div class="card-body">
         <?php if (!empty($data['error'])): ?>
-            <div class="alert alert-danger"><?= $data['error'] ?></div>
+            <div class="alert alert-danger">
+                <i class="ti ti-alert-circle me-2"></i><?= $data['error'] ?>
+            </div>
         <?php endif; ?>
 
-        <form method="POST">
+        <form method="POST" autocomplete="off">
             <div class="row g-3">
                 <div class="col-md-4">
-                    <label class="form-label">Nombres *</label>
+                    <label class="form-label required">Nombres</label>
                     <input type="text" name="nombres" class="form-control" value="<?= $est->nombres ?>" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Apellido Paterno *</label>
+                    <label class="form-label required">Apellido Paterno</label>
                     <input type="text" name="apellido_paterno" class="form-control" value="<?= $est->apellido_paterno ?>" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Apellido Materno *</label>
+                    <label class="form-label required">Apellido Materno</label>
                     <input type="text" name="apellido_materno" class="form-control" value="<?= $est->apellido_materno ?>" required>
                 </div>
                 <div class="col-md-3">
@@ -34,11 +42,11 @@
                     <input type="text" name="dni" class="form-control" maxlength="8" value="<?= $est->dni ?>">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Fecha de Nacimiento *</label>
+                    <label class="form-label required">Fecha de Nacimiento</label>
                     <input type="date" name="fecha_nacimiento" class="form-control" value="<?= $est->fecha_nacimiento ?>" required>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Género *</label>
+                    <label class="form-label required">Género</label>
                     <select name="genero" class="form-select" required>
                         <option value="MASCULINO" <?= $est->genero == 'MASCULINO' ? 'selected' : '' ?>>Masculino</option>
                         <option value="FEMENINO" <?= $est->genero == 'FEMENINO' ? 'selected' : '' ?>>Femenino</option>
@@ -62,13 +70,19 @@
                 </div>
             </div>
 
-            <div class="mt-4">
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-save"></i> Guardar Cambios
-                </button>
-                <a href="<?= APP_URL ?>/estudiantes/ver/<?= $est->id ?>" class="btn btn-secondary">
-                    Cancelar
-                </a>
+            <div class="card-footer bg-transparent mt-3 px-0">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <a href="<?= APP_URL ?>/estudiantes/ver/<?= $est->id ?>" class="btn btn-link">
+                            Cancelar
+                        </a>
+                    </div>
+                    <div class="col-auto ms-auto">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="ti ti-device-floppy me-1"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

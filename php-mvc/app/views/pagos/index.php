@@ -1,25 +1,31 @@
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="card bg-light">
-            <div class="card-body text-center">
-                <p class="text-muted mb-0 small">Total a Cobrar</p>
-                <h4 class="mb-0">S/ <?= number_format($data['totalMonto'], 2) ?></h4>
+<div class="row row-deck row-cards mb-4">
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="subheader">Total a Cobrar</div>
+                </div>
+                <div class="h1 mb-0">S/ <?= number_format($data['totalMonto'], 2) ?></div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card bg-success bg-opacity-10">
-            <div class="card-body text-center">
-                <p class="text-muted mb-0 small">Total Recaudado</p>
-                <h4 class="mb-0 text-success">S/ <?= number_format($data['totalPagado'], 2) ?></h4>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="subheader">Total Recaudado</div>
+                </div>
+                <div class="h1 mb-0 text-green">S/ <?= number_format($data['totalPagado'], 2) ?></div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card bg-danger bg-opacity-10">
-            <div class="card-body text-center">
-                <p class="text-muted mb-0 small">Pendiente</p>
-                <h4 class="mb-0 text-danger">S/ <?= number_format($data['totalMonto'] - $data['totalPagado'], 2) ?></h4>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="subheader">Pendiente</div>
+                </div>
+                <div class="h1 mb-0 text-red">S/ <?= number_format($data['totalMonto'] - $data['totalPagado'], 2) ?></div>
             </div>
         </div>
     </div>
@@ -48,7 +54,9 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-outline-primary w-100">Filtrar</button>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="ti ti-filter me-1"></i> Filtrar
+                </button>
             </div>
         </form>
     </div>
@@ -56,8 +64,8 @@
 
 <div class="card">
     <div class="table-responsive">
-        <table class="table table-hover mb-0">
-            <thead class="table-light">
+        <table class="table table-vcenter card-table">
+            <thead>
                 <tr>
                     <th>Recibo</th>
                     <th>Estudiante</th>
@@ -66,22 +74,34 @@
                     <th class="text-end">Monto</th>
                     <th class="text-end">Pagado</th>
                     <th class="text-center">Estado</th>
-                    <th class="text-center">Acción</th>
+                    <th class="w-1"></th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($data['pagos'])): ?>
-                    <tr><td colspan="8" class="text-center text-muted py-4">No hay pagos</td></tr>
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">
+                            <i class="ti ti-receipt-off ti-lg mb-2"></i><br>
+                            No hay pagos registrados
+                        </td>
+                    </tr>
                 <?php else: ?>
                     <?php
                     $meses = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
                     foreach ($data['pagos'] as $pago):
                     ?>
                         <tr>
-                            <td class="small"><?= $pago->numero_recibo ?></td>
+                            <td class="text-muted"><?= $pago->numero_recibo ?></td>
                             <td>
-                                <div><?= $pago->apellido_paterno ?> <?= $pago->apellido_materno ?></div>
-                                <small class="text-muted"><?= $pago->nombres ?></small>
+                                <div class="d-flex py-1 align-items-center">
+                                    <span class="avatar avatar-sm bg-primary-lt me-2">
+                                        <?= strtoupper(substr($pago->nombres, 0, 1)) ?>
+                                    </span>
+                                    <div class="flex-fill">
+                                        <div class="font-weight-medium"><?= $pago->apellido_paterno ?> <?= $pago->apellido_materno ?></div>
+                                        <div class="text-muted small"><?= $pago->nombres ?></div>
+                                    </div>
+                                </div>
                             </td>
                             <td><?= $pago->concepto_nombre ?></td>
                             <td class="text-center"><?= $pago->mes ? $meses[$pago->mes] : '-' ?></td>
@@ -90,19 +110,21 @@
                             <td class="text-center">
                                 <?php
                                 $badges = [
-                                    'PENDIENTE' => 'warning',
-                                    'PAGADO' => 'success',
-                                    'PARCIAL' => 'info',
-                                    'VENCIDO' => 'danger',
+                                    'PENDIENTE' => 'yellow',
+                                    'PAGADO' => 'green',
+                                    'PARCIAL' => 'azure',
+                                    'VENCIDO' => 'red',
                                     'ANULADO' => 'secondary'
                                 ];
                                 ?>
-                                <span class="badge bg-<?= $badges[$pago->estado] ?>"><?= $pago->estado ?></span>
+                                <span class="badge bg-<?= $badges[$pago->estado] ?>-lt"><?= $pago->estado ?></span>
                             </td>
-                            <td class="text-center">
+                            <td>
                                 <?php if ($pago->estado != 'PAGADO' && $pago->estado != 'ANULADO'): ?>
                                     <a href="<?= APP_URL ?>/pagos/registrar/<?= $pago->id ?>"
-                                       class="btn btn-sm btn-success">Pagar</a>
+                                       class="btn btn-sm btn-success">
+                                        <i class="ti ti-cash me-1"></i> Pagar
+                                    </a>
                                 <?php endif; ?>
                             </td>
                         </tr>
