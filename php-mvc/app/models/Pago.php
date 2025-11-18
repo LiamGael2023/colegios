@@ -198,4 +198,46 @@ class Pago {
 
         return $this->db->resultSet();
     }
+
+    public function getConceptoById($id) {
+        $this->db->query('SELECT * FROM conceptos_pago WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
+    public function crearConcepto($nombre, $descripcion, $monto, $esRecurrente) {
+        $this->db->query('INSERT INTO conceptos_pago (nombre, descripcion, monto, es_recurrente)
+                         VALUES (:nombre, :descripcion, :monto, :es_recurrente)');
+        $this->db->bind(':nombre', $nombre);
+        $this->db->bind(':descripcion', $descripcion);
+        $this->db->bind(':monto', $monto);
+        $this->db->bind(':es_recurrente', $esRecurrente);
+        return $this->db->execute();
+    }
+
+    public function actualizarConcepto($id, $nombre, $descripcion, $monto, $esRecurrente) {
+        $this->db->query('UPDATE conceptos_pago SET nombre = :nombre, descripcion = :descripcion,
+                         monto = :monto, es_recurrente = :es_recurrente WHERE id = :id');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':nombre', $nombre);
+        $this->db->bind(':descripcion', $descripcion);
+        $this->db->bind(':monto', $monto);
+        $this->db->bind(':es_recurrente', $esRecurrente);
+        return $this->db->execute();
+    }
+
+    public function eliminarConcepto($id) {
+        // Verificar si tiene pagos asociados
+        $this->db->query('SELECT COUNT(*) as total FROM pagos WHERE concepto_id = :id');
+        $this->db->bind(':id', $id);
+        $result = $this->db->single();
+
+        if ($result->total > 0) {
+            return false;
+        }
+
+        $this->db->query('DELETE FROM conceptos_pago WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
+    }
 }

@@ -73,4 +73,54 @@ class Usuario {
         $this->db->bind(':password', password_hash($newPassword, PASSWORD_DEFAULT));
         return $this->db->execute();
     }
+
+    public function crear($email, $passwordHash, $nombre, $apellidos, $dni, $telefono, $rol) {
+        $this->db->query('INSERT INTO usuarios (email, password, nombre, apellidos, dni, telefono, rol)
+                         VALUES (:email, :password, :nombre, :apellidos, :dni, :telefono, :rol)');
+
+        $this->db->bind(':email', $email);
+        $this->db->bind(':password', $passwordHash);
+        $this->db->bind(':nombre', $nombre);
+        $this->db->bind(':apellidos', $apellidos);
+        $this->db->bind(':dni', $dni);
+        $this->db->bind(':telefono', $telefono);
+        $this->db->bind(':rol', $rol);
+
+        return $this->db->execute();
+    }
+
+    public function actualizar($id, $email, $nombre, $apellidos, $dni, $telefono, $rol, $activo) {
+        $this->db->query('UPDATE usuarios SET email = :email, nombre = :nombre, apellidos = :apellidos,
+                         dni = :dni, telefono = :telefono, rol = :rol, activo = :activo WHERE id = :id');
+
+        $this->db->bind(':id', $id);
+        $this->db->bind(':email', $email);
+        $this->db->bind(':nombre', $nombre);
+        $this->db->bind(':apellidos', $apellidos);
+        $this->db->bind(':dni', $dni);
+        $this->db->bind(':telefono', $telefono);
+        $this->db->bind(':rol', $rol);
+        $this->db->bind(':activo', $activo);
+
+        return $this->db->execute();
+    }
+
+    public function cambiarPassword($id, $passwordHash) {
+        $this->db->query('UPDATE usuarios SET password = :password WHERE id = :id');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':password', $passwordHash);
+        return $this->db->execute();
+    }
+
+    public function eliminar($id) {
+        $this->db->query('DELETE FROM usuarios WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
+    }
+
+    public function countByRol($rol) {
+        $this->db->query('SELECT COUNT(*) as total FROM usuarios WHERE rol = :rol AND activo = TRUE');
+        $this->db->bind(':rol', $rol);
+        return $this->db->single()->total;
+    }
 }

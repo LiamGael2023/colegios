@@ -95,11 +95,36 @@
                                 <a class="dropdown-item" href="<?= APP_URL ?>/pagos">
                                     Historial de Pagos
                                 </a>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/pagos/nuevo">
+                                    Nuevo Pago
+                                </a>
                                 <a class="dropdown-item" href="<?= APP_URL ?>/pagos/morosidad">
                                     Reporte de Morosidad
                                 </a>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/pagos/ingresos">
+                                    Reporte de Ingresos
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/pagos/conceptos">
+                                    Conceptos de Pago
+                                </a>
                             </div>
                         </li>
+                        <?php if (in_array($_SESSION['usuario_rol'], ['ADMIN', 'DIRECTOR'])): ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#navbar-admin" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-settings"></i>
+                                </span>
+                                <span class="nav-link-title">Administración</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="<?= APP_URL ?>/usuarios">
+                                    Usuarios del Sistema
+                                </a>
+                            </div>
+                        </li>
+                        <?php endif; ?>
                         <li class="nav-item mt-auto">
                             <a class="nav-link text-danger" href="<?= APP_URL ?>/auth/logout">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">

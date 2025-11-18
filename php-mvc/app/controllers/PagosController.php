@@ -186,4 +186,122 @@ class PagosController extends Controller {
             'title' => 'Reporte de Ingresos'
         ]);
     }
+
+    public function nuevo() {
+        $this->requireRole(['ADMIN', 'DIRECTOR', 'SECRETARIA']);
+
+        $estudianteModel = $this->model('Estudiante');
+        $anioActivo = $this->academicoModel->getAnioActivo();
+        $buscar = $this->getQuery('buscar');
+
+        $estudiantes = [];
+        if ($buscar) {
+            $estudiantes = $estudianteModel->search($buscar);
+        }
+
+        $data = [
+            'estudiantes' => $estudiantes,
+            'anioActivo' => $anioActivo,
+            'buscar' => $buscar
+        ];
+
+        $this->view('layouts/main', [
+            'content' => 'pagos/nuevo',
+            'data' => $data,
+            'title' => 'Nuevo Pago - Buscar Estudiante'
+        ]);
+    }
+
+    // CRUD Conceptos de Pago
+    public function conceptos() {
+        $this->requireRole(['ADMIN', 'DIRECTOR']);
+
+        $conceptos = $this->pagoModel->getConceptos();
+
+        $this->view('layouts/main', [
+            'content' => 'pagos/conceptos/index',
+            'data' => ['conceptos' => $conceptos],
+            'title' => 'Conceptos de Pago'
+        ]);
+    }
+
+    public function crearConcepto() {
+        $this->requireRole(['ADMIN', 'DIRECTOR']);
+
+        $data = ['error' => ''];
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $nombre = $this->getPost('nombre');
+            $descripcion = $this->getPost('descripcion');
+            $monto = floatval($this->getPost('monto'));
+            $esRecurrente = isset($_POST['es_recurrente']) ? 1 : 0;
+
+            if ($this->pagoModel->crearConcepto($nombre, $descripcion, $monto, $esRecurrente)) {
+                $_SESSION['success'] = 'Concepto creado correctamente';
+                $this->redirect('pagos/conceptos');
+            } else {
+                $data['error'] = 'Error al crear concepto';
+            }
+        }
+
+        $this->view('layouts/main', [
+            'content' => 'pagos/conceptos/crear',
+            'data' => $data,
+            'title' => 'Nuevo Concepto de Pago'
+        ]);
+    }
+
+    public function editarConcepto($id = null) {
+        $this->requireRole(['ADMIN', 'DIRECTOR']);
+
+        if (!$id) {
+            $this->redirect('pagos/conceptos');
+        }
+
+        $concepto = $this->pagoModel->getConceptoById($id);
+
+        if (!$concepto) {
+            $_SESSION['error'] = 'Concepto no encontrado';
+            $this->redirect('pagos/conceptos');
+        }
+
+        $data = [
+            'concepto' => $concepto,
+            'error' => ''
+        ];
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $nombre = $this->getPost('nombre');
+            $descripcion = $this->getPost('descripcion');
+            $monto = floatval($this->getPost('monto'));
+            $esRecurrente = isset($_POST['es_recurrente']) ? 1 : 0;
+
+            if ($this->pagoModel->actualizarConcepto($id, $nombre, $descripcion, $monto, $esRecurrente)) {
+                $_SESSION['success'] = 'Concepto actualizado correctamente';
+                $this->redirect('pagos/conceptos');
+            } else {
+                $data['error'] = 'Error al actualizar concepto';
+            }
+        }
+
+        $this->view('layouts/main', [
+            'content' => 'pagos/conceptos/editar',
+            'data' => $data,
+            'title' => 'Editar Concepto de Pago'
+        ]);
+    }
+
+    public function eliminarConcepto($id = null) {
+        $this->requireRole(['ADMIN', 'DIRECTOR']);
+
+        if ($id) {
+            if ($this->pagoModel->eliminarConcepto($id)) {
+                $_SESSION['success'] = 'Concepto eliminado correctamente';
+            } else {
+                $_SESSION['error'] = 'No se puede eliminar. El concepto tiene pagos asociados.';
+            }
+        }
+
+        $this->redirect('pagos/conceptos');
+    }
 }
