@@ -1,10 +1,18 @@
+<?php
+$seccion = $data['seccion'] ?? null;
+$horarios = $data['horarios'] ?? [];
+$horariosPorDia = $data['horariosPorDia'] ?? [];
+$asignaciones = $data['asignaciones'] ?? [];
+$dias = $data['dias'] ?? ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];
+?>
+
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="row align-items-center">
             <div class="col-auto">
                 <div class="page-pretitle">Horario</div>
                 <h2 class="page-title">
-                    <?= htmlspecialchars($seccion->grado_nombre . ' "' . $seccion->nombre . '"') ?>
+                    <?= $seccion ? htmlspecialchars($seccion->grado_nombre . ' "' . $seccion->nombre . '"') : 'Sección no encontrada' ?>
                 </h2>
             </div>
             <div class="col-auto ms-auto d-print-none">
@@ -61,7 +69,7 @@
                             </div>
                         <?php else: ?>
                             <form action="<?= APP_URL ?>/horarios/agregar" method="POST">
-                                <input type="hidden" name="seccion_id" value="<?= $seccion->id ?>">
+                                <input type="hidden" name="seccion_id" value="<?= $seccion ? $seccion->id : '' ?>">
 
                                 <div class="mb-3">
                                     <label class="form-label required">Curso/Docente</label>

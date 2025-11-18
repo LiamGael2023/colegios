@@ -1,10 +1,18 @@
+<?php
+$matriculas = $data['matriculas'] ?? [];
+$secciones = $data['secciones'] ?? [];
+$seccionId = $data['seccionId'] ?? '';
+$estado = $data['estado'] ?? '';
+$anio = $data['anio'] ?? null;
+?>
+
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="row align-items-center">
             <div class="col-auto">
                 <div class="page-pretitle">Gestión</div>
                 <h2 class="page-title">
-                    <i class="ti ti-file-certificate me-2"></i>Matrículas <?= $anio->anio ?>
+                    <i class="ti ti-file-certificate me-2"></i>Matrículas <?= $anio ? $anio->anio : '' ?>
                 </h2>
             </div>
             <div class="col-auto ms-auto">
