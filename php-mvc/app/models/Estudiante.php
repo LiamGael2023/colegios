@@ -203,19 +203,4 @@ class Estudiante {
 
         return $this->db->single();
     }
-
-    public function getBySeccion($seccionId, $anioEscolarId) {
-        $sql = 'SELECT e.*, m.codigo as matricula_codigo
-                FROM estudiantes e
-                INNER JOIN matriculas m ON e.id = m.estudiante_id
-                WHERE m.seccion_id = :seccion_id AND m.anio_escolar_id = :anio_escolar_id
-                AND m.estado = "ACTIVA"
-                ORDER BY e.apellido_paterno, e.apellido_materno, e.nombres';
-
-        $this->db->query($sql);
-        $this->db->bind(':seccion_id', $seccionId);
-        $this->db->bind(':anio_escolar_id', $anioEscolarId);
-
-        return $this->db->resultSet();
-    }
 }
