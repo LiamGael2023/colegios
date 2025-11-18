@@ -22,6 +22,41 @@ class Academico {
         return $this->db->resultSet();
     }
 
+    public function getAnioById($id) {
+        $this->db->query('SELECT * FROM anios_escolares WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
+    public function getPeriodoById($id) {
+        $this->db->query('SELECT * FROM periodos WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
+    public function actualizarPeriodo($id, $fechaInicio, $fechaFin) {
+        $this->db->query('UPDATE periodos SET fecha_inicio = :fecha_inicio, fecha_fin = :fecha_fin WHERE id = :id');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':fecha_inicio', $fechaInicio);
+        $this->db->bind(':fecha_fin', $fechaFin);
+        return $this->db->execute();
+    }
+
+    public function activarPeriodo($id) {
+        $periodo = $this->getPeriodoById($id);
+        if (!$periodo) return false;
+
+        // Desactivar todos los períodos del mismo año
+        $this->db->query('UPDATE periodos SET activo = FALSE WHERE anio_escolar_id = :anio_id');
+        $this->db->bind(':anio_id', $periodo->anio_escolar_id);
+        $this->db->execute();
+
+        // Activar el período seleccionado
+        $this->db->query('UPDATE periodos SET activo = TRUE WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
+    }
+
     public function getNiveles() {
         $this->db->query('SELECT * FROM niveles ORDER BY id');
         return $this->db->resultSet();
@@ -147,11 +182,39 @@ class Academico {
     }
 
     // ========== CRUD GRADOS ==========
+    public function getGradoById($id) {
+        $this->db->query('SELECT g.*, n.nombre as nivel_nombre FROM grados g
+                         INNER JOIN niveles n ON g.nivel_id = n.id WHERE g.id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
     public function crearGrado($nivelId, $nombre, $numero) {
         $this->db->query('INSERT INTO grados (nivel_id, nombre, numero) VALUES (:nivel_id, :nombre, :numero)');
         $this->db->bind(':nivel_id', $nivelId);
         $this->db->bind(':nombre', $nombre);
         $this->db->bind(':numero', $numero);
+        return $this->db->execute();
+    }
+
+    public function actualizarGrado($id, $nivelId, $nombre, $numero) {
+        $this->db->query('UPDATE grados SET nivel_id = :nivel_id, nombre = :nombre, numero = :numero WHERE id = :id');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':nivel_id', $nivelId);
+        $this->db->bind(':nombre', $nombre);
+        $this->db->bind(':numero', $numero);
+        return $this->db->execute();
+    }
+
+    public function eliminarGrado($id) {
+        // Verificar que no tenga secciones
+        $this->db->query('SELECT COUNT(*) as total FROM secciones WHERE grado_id = :id');
+        $this->db->bind(':id', $id);
+        $result = $this->db->single();
+        if ($result->total > 0) return false;
+
+        $this->db->query('DELETE FROM grados WHERE id = :id');
+        $this->db->bind(':id', $id);
         return $this->db->execute();
     }
 
@@ -164,7 +227,44 @@ class Academico {
         return $this->db->execute();
     }
 
+    public function actualizarSeccion($id, $gradoId, $nombre, $capacidad) {
+        $this->db->query('UPDATE secciones SET grado_id = :grado_id, nombre = :nombre, capacidad = :capacidad WHERE id = :id');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':grado_id', $gradoId);
+        $this->db->bind(':nombre', $nombre);
+        $this->db->bind(':capacidad', $capacidad);
+        return $this->db->execute();
+    }
+
+    public function eliminarSeccion($id) {
+        // Verificar que no tenga matrículas
+        $this->db->query('SELECT COUNT(*) as total FROM matriculas WHERE seccion_id = :id');
+        $this->db->bind(':id', $id);
+        $result = $this->db->single();
+        if ($result->total > 0) return false;
+
+        // Verificar que no tenga asignaciones
+        $this->db->query('SELECT COUNT(*) as total FROM asignaciones_profesor WHERE seccion_id = :id');
+        $this->db->bind(':id', $id);
+        $result = $this->db->single();
+        if ($result->total > 0) return false;
+
+        $this->db->query('DELETE FROM secciones WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
+    }
+
     // ========== CRUD CURSOS ==========
+    public function getCursoById($id) {
+        $this->db->query('SELECT c.*, a.nombre as area_nombre, g.nombre as grado_nombre
+                         FROM cursos c
+                         INNER JOIN areas_curriculares a ON c.area_curricular_id = a.id
+                         INNER JOIN grados g ON c.grado_id = g.id
+                         WHERE c.id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
     public function crearCurso($gradoId, $areaId, $nombre, $horasSemanales) {
         $this->db->query('INSERT INTO cursos (grado_id, area_curricular_id, nombre, horas_semanales)
                          VALUES (:grado_id, :area_id, :nombre, :horas)');
@@ -172,6 +272,35 @@ class Academico {
         $this->db->bind(':area_id', $areaId);
         $this->db->bind(':nombre', $nombre);
         $this->db->bind(':horas', $horasSemanales);
+        return $this->db->execute();
+    }
+
+    public function actualizarCurso($id, $gradoId, $areaId, $nombre, $horasSemanales) {
+        $this->db->query('UPDATE cursos SET grado_id = :grado_id, area_curricular_id = :area_id,
+                         nombre = :nombre, horas_semanales = :horas WHERE id = :id');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':grado_id', $gradoId);
+        $this->db->bind(':area_id', $areaId);
+        $this->db->bind(':nombre', $nombre);
+        $this->db->bind(':horas', $horasSemanales);
+        return $this->db->execute();
+    }
+
+    public function eliminarCurso($id) {
+        // Verificar que no tenga notas
+        $this->db->query('SELECT COUNT(*) as total FROM notas WHERE curso_id = :id');
+        $this->db->bind(':id', $id);
+        $result = $this->db->single();
+        if ($result->total > 0) return false;
+
+        // Verificar que no tenga asignaciones
+        $this->db->query('SELECT COUNT(*) as total FROM asignaciones_profesor WHERE curso_id = :id');
+        $this->db->bind(':id', $id);
+        $result = $this->db->single();
+        if ($result->total > 0) return false;
+
+        $this->db->query('DELETE FROM cursos WHERE id = :id');
+        $this->db->bind(':id', $id);
         return $this->db->execute();
     }
 

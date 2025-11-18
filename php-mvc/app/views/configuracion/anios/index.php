@@ -42,13 +42,20 @@
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <?php if (!$anio->activo): ?>
-                                    <a href="<?= APP_URL ?>/configuracion/activarAnio/<?= $anio->id ?>"
-                                       class="btn btn-sm btn-success"
-                                       onclick="return confirm('¿Activar este año escolar?')">
-                                        <i class="ti ti-check me-1"></i> Activar
+                                <div class="btn-list flex-nowrap">
+                                    <a href="<?= APP_URL ?>/configuracion/periodos/<?= $anio->id ?>"
+                                       class="btn btn-sm" title="Ver períodos">
+                                        <i class="ti ti-calendar"></i>
                                     </a>
-                                <?php endif; ?>
+                                    <?php if (!$anio->activo): ?>
+                                        <a href="<?= APP_URL ?>/configuracion/activarAnio/<?= $anio->id ?>"
+                                           class="btn btn-sm btn-ghost-success"
+                                           onclick="return confirm('¿Activar este año escolar?')"
+                                           title="Activar">
+                                            <i class="ti ti-check"></i>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

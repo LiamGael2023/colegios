@@ -17,12 +17,13 @@
                     <th>Nivel</th>
                     <th>Grado</th>
                     <th class="text-center">Número</th>
+                    <th class="w-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($data['grados'])): ?>
                     <tr>
-                        <td colspan="3" class="text-center text-muted py-4">No hay grados</td>
+                        <td colspan="4" class="text-center text-muted py-4">No hay grados</td>
                     </tr>
                 <?php else: ?>
                     <?php foreach ($data['grados'] as $grado): ?>
@@ -34,6 +35,20 @@
                                 <div class="font-weight-medium"><?= $grado->nombre ?></div>
                             </td>
                             <td class="text-center"><?= $grado->numero ?></td>
+                            <td>
+                                <div class="btn-list flex-nowrap">
+                                    <a href="<?= APP_URL ?>/configuracion/editarGrado/<?= $grado->id ?>"
+                                       class="btn btn-sm" title="Editar">
+                                        <i class="ti ti-edit"></i>
+                                    </a>
+                                    <a href="<?= APP_URL ?>/configuracion/eliminarGrado/<?= $grado->id ?>"
+                                       class="btn btn-sm btn-ghost-danger"
+                                       onclick="return confirm('¿Eliminar este grado?')"
+                                       title="Eliminar">
+                                        <i class="ti ti-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

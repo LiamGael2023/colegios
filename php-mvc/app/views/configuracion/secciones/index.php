@@ -18,12 +18,13 @@
                     <th>Grado</th>
                     <th>Sección</th>
                     <th class="text-center">Capacidad</th>
+                    <th class="w-1">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($data['secciones'])): ?>
                     <tr>
-                        <td colspan="4" class="text-center text-muted py-4">No hay secciones</td>
+                        <td colspan="5" class="text-center text-muted py-4">No hay secciones</td>
                     </tr>
                 <?php else: ?>
                     <?php foreach ($data['secciones'] as $seccion): ?>
@@ -36,6 +37,20 @@
                                 <div class="font-weight-medium">"<?= $seccion->nombre ?>"</div>
                             </td>
                             <td class="text-center"><?= $seccion->capacidad ?></td>
+                            <td>
+                                <div class="btn-list flex-nowrap">
+                                    <a href="<?= APP_URL ?>/configuracion/editarSeccion/<?= $seccion->id ?>"
+                                       class="btn btn-sm" title="Editar">
+                                        <i class="ti ti-edit"></i>
+                                    </a>
+                                    <a href="<?= APP_URL ?>/configuracion/eliminarSeccion/<?= $seccion->id ?>"
+                                       class="btn btn-sm btn-ghost-danger"
+                                       onclick="return confirm('¿Eliminar esta sección?')"
+                                       title="Eliminar">
+                                        <i class="ti ti-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
