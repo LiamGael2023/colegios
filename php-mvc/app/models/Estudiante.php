@@ -175,4 +175,34 @@ class Estudiante {
 
         return $this->db->execute();
     }
+
+    public function getMatriculaActual($estudianteId, $anioEscolarId) {
+        $sql = 'SELECT m.*, s.nombre as seccion_nombre, g.nombre as grado_nombre, n.nombre as nivel_nombre
+                FROM matriculas m
+                INNER JOIN secciones s ON m.seccion_id = s.id
+                INNER JOIN grados g ON s.grado_id = g.id
+                INNER JOIN niveles n ON g.nivel_id = n.id
+                WHERE m.estudiante_id = :estudiante_id AND m.anio_escolar_id = :anio_escolar_id';
+
+        $this->db->query($sql);
+        $this->db->bind(':estudiante_id', $estudianteId);
+        $this->db->bind(':anio_escolar_id', $anioEscolarId);
+
+        return $this->db->single();
+    }
+
+    public function getBySeccion($seccionId, $anioEscolarId) {
+        $sql = 'SELECT e.*, m.codigo as matricula_codigo
+                FROM estudiantes e
+                INNER JOIN matriculas m ON e.id = m.estudiante_id
+                WHERE m.seccion_id = :seccion_id AND m.anio_escolar_id = :anio_escolar_id
+                AND m.estado = "ACTIVA"
+                ORDER BY e.apellido_paterno, e.apellido_materno, e.nombres';
+
+        $this->db->query($sql);
+        $this->db->bind(':seccion_id', $seccionId);
+        $this->db->bind(':anio_escolar_id', $anioEscolarId);
+
+        return $this->db->resultSet();
+    }
 }

@@ -97,4 +97,17 @@ class Nota {
 
         return $this->db->resultSet();
     }
+
+    public function getByEstudiantePeriodo($estudianteId, $periodoId) {
+        $sql = 'SELECT n.*, c.id as curso_id, c.nombre as curso_nombre
+                FROM notas n
+                INNER JOIN cursos c ON n.curso_id = c.id
+                WHERE n.estudiante_id = :estudiante_id AND n.periodo_id = :periodo_id';
+
+        $this->db->query($sql);
+        $this->db->bind(':estudiante_id', $estudianteId);
+        $this->db->bind(':periodo_id', $periodoId);
+
+        return $this->db->resultSet();
+    }
 }

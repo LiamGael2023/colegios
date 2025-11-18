@@ -71,18 +71,26 @@
                                 <a class="dropdown-item" href="<?= APP_URL ?>/notas">
                                     Gestión de Notas
                                 </a>
-                                <a class="dropdown-item" href="<?= APP_URL ?>/reportes/libreta">
-                                    Libreta de Notas
+                                <a class="dropdown-item" href="<?= APP_URL ?>/reportes/consolidado">
+                                    Consolidado de Notas
                                 </a>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= APP_URL ?>/asistencia">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#navbar-asistencia" data-bs-toggle="dropdown" role="button" aria-expanded="false">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <i class="ti ti-calendar-check"></i>
                                 </span>
                                 <span class="nav-link-title">Asistencia</span>
                             </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="<?= APP_URL ?>/asistencia">
+                                    Registro Diario
+                                </a>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/reportes/asistenciaMensual">
+                                    Reporte Mensual
+                                </a>
+                            </div>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#navbar-pagos" data-bs-toggle="dropdown" role="button" aria-expanded="false">

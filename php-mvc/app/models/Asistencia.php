@@ -116,4 +116,16 @@ class Asistencia {
 
         return $this->db->single();
     }
+
+    public function getByEstudianteMes($estudianteId, $anio, $mes) {
+        $this->db->query('SELECT * FROM asistencias
+                         WHERE estudiante_id = :estudiante_id
+                         AND YEAR(fecha) = :anio AND MONTH(fecha) = :mes
+                         ORDER BY fecha');
+        $this->db->bind(':estudiante_id', $estudianteId);
+        $this->db->bind(':anio', $anio);
+        $this->db->bind(':mes', $mes);
+
+        return $this->db->resultSet();
+    }
 }
