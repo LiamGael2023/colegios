@@ -7,7 +7,7 @@ INSERT INTO institucion (nombre, codigo_modular, direccion, telefono, email, dir
 VALUES ('I.E.P. San José', '1234567', 'Av. Principal 123, Lima', '01-1234567', 'info@iepsanjose.edu.pe', 'Dr. Juan Pérez García', 'UGEL 03', 'Lima');
 
 -- ==================== USUARIOS ====================
--- Contraseña: admin123 (hash bcrypt)
+-- Contraseña para todos los usuarios: password
 INSERT INTO usuarios (email, password, nombre, apellidos, dni, telefono, rol, activo) VALUES
 ('admin@colegio.edu.pe', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrador', 'Sistema', '00000001', '999000001', 'ADMIN', TRUE),
 ('director@colegio.edu.pe', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Juan', 'Pérez García', '12345678', '999888777', 'DIRECTOR', TRUE),
