@@ -122,6 +122,24 @@
                                 <a class="dropdown-item" href="<?= APP_URL ?>/usuarios">
                                     Usuarios del Sistema
                                 </a>
+                                <div class="dropdown-divider"></div>
+                                <span class="dropdown-header">Configuración Académica</span>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/configuracion/anios">
+                                    Años Escolares
+                                </a>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/configuracion/grados">
+                                    Grados
+                                </a>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/configuracion/secciones">
+                                    Secciones
+                                </a>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/configuracion/cursos">
+                                    Cursos
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/configuracion/institucion">
+                                    <i class="ti ti-building me-1"></i>Institución
+                                </a>
                             </div>
                         </li>
                         <?php endif; ?>
