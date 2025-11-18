@@ -1,0 +1,422 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== USUARIOS Y AUTENTICACIÓN ====================
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  nombre    String
+  apellidos String
+  dni       String   @unique
+  telefono  String?
+  rol       Rol      @default(PROFESOR)
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profesor Profesor?
+}
+
+enum Rol {
+  ADMIN
+  DIRECTOR
+  PROFESOR
+  SECRETARIA
+}
+
+// ==================== INSTITUCIÓN EDUCATIVA ====================
+model InstitucionEducativa {
+  id              Int      @id @default(autoincrement())
+  nombre          String
+  codigoModular   String   @unique
+  direccion       String
+  telefono        String?
+  email           String?
+  director        String?
+  ugel            String?
+  region          String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  aniosEscolares AnioEscolar[]
+}
+
+model AnioEscolar {
+  id           Int      @id @default(autoincrement())
+  anio         Int      @unique
+  fechaInicio  DateTime
+  fechaFin     DateTime
+  activo       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  institucionId Int
+  institucion   InstitucionEducativa @relation(fields: [institucionId], references: [id])
+
+  periodos     Periodo[]
+  matriculas   Matricula[]
+  asistencias  Asistencia[]
+  pagos        Pago[]
+}
+
+model Periodo {
+  id          Int         @id @default(autoincrement())
+  nombre      String      // "Bimestre 1", "Bimestre 2", etc.
+  tipo        TipoPeriodo @default(BIMESTRE)
+  numero      Int         // 1, 2, 3, 4
+  fechaInicio DateTime
+  fechaFin    DateTime
+  activo      Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  anioEscolarId Int
+  anioEscolar   AnioEscolar @relation(fields: [anioEscolarId], references: [id])
+
+  notas Nota[]
+}
+
+enum TipoPeriodo {
+  BIMESTRE
+  TRIMESTRE
+}
+
+// ==================== ESTRUCTURA ACADÉMICA ====================
+model Nivel {
+  id        Int      @id @default(autoincrement())
+  nombre    String   @unique // INICIAL, PRIMARIA, SECUNDARIA
+  codigo    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  grados Grado[]
+}
+
+model Grado {
+  id        Int      @id @default(autoincrement())
+  nombre    String   // "3 años", "1er Grado", "5to Año"
+  numero    Int      // 1, 2, 3, 4, 5, 6
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  nivelId Int
+  nivel   Nivel @relation(fields: [nivelId], references: [id])
+
+  secciones Seccion[]
+  cursos    Curso[]
+
+  @@unique([nivelId, numero])
+}
+
+model Seccion {
+  id        Int      @id @default(autoincrement())
+  nombre    String   // "A", "B", "C"
+  capacidad Int      @default(30)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  gradoId Int
+  grado   Grado @relation(fields: [gradoId], references: [id])
+
+  matriculas       Matricula[]
+  asignaciones     AsignacionProfesor[]
+
+  @@unique([gradoId, nombre])
+}
+
+// ==================== CURSOS Y ÁREAS ====================
+model AreaCurricular {
+  id          Int      @id @default(autoincrement())
+  nombre      String   @unique
+  descripcion String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cursos Curso[]
+}
+
+model Curso {
+  id             Int      @id @default(autoincrement())
+  nombre         String
+  horasSemanales Int      @default(2)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  areaCurricularId Int
+  areaCurricular   AreaCurricular @relation(fields: [areaCurricularId], references: [id])
+
+  gradoId Int
+  grado   Grado @relation(fields: [gradoId], references: [id])
+
+  competencias Competencia[]
+  asignaciones AsignacionProfesor[]
+  notas        Nota[]
+
+  @@unique([nombre, gradoId])
+}
+
+model Competencia {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cursoId Int
+  curso   Curso @relation(fields: [cursoId], references: [id])
+
+  notas Nota[]
+}
+
+// ==================== PROFESORES ====================
+model Profesor {
+  id            Int      @id @default(autoincrement())
+  especialidad  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  usuarioId Int     @unique
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  asignaciones AsignacionProfesor[]
+}
+
+model AsignacionProfesor {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profesorId Int
+  profesor   Profesor @relation(fields: [profesorId], references: [id])
+
+  cursoId Int
+  curso   Curso @relation(fields: [cursoId], references: [id])
+
+  seccionId Int
+  seccion   Seccion @relation(fields: [seccionId], references: [id])
+
+  @@unique([profesorId, cursoId, seccionId])
+}
+
+// ==================== ESTUDIANTES Y APODERADOS ====================
+model Estudiante {
+  id                 Int      @id @default(autoincrement())
+  codigo             String   @unique
+  dni                String?  @unique
+  nombres            String
+  apellidoPaterno    String
+  apellidoMaterno    String
+  fechaNacimiento    DateTime
+  genero             Genero
+  direccion          String?
+  telefono           String?
+  email              String?
+  lugarNacimiento    String?
+  nacionalidad       String   @default("Peruana")
+  lengua             String   @default("Castellano")
+  religion           String?
+  tipoSangre         String?
+  alergias           String?
+  discapacidad       String?
+  observaciones      String?
+  foto               String?
+  activo             Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  apoderados   Apoderado[]
+  matriculas   Matricula[]
+  asistencias  Asistencia[]
+  notas        Nota[]
+  pagos        Pago[]
+}
+
+enum Genero {
+  MASCULINO
+  FEMENINO
+}
+
+model Apoderado {
+  id              Int            @id @default(autoincrement())
+  dni             String
+  nombres         String
+  apellidos       String
+  parentesco      Parentesco
+  telefono        String
+  telefonoTrabajo String?
+  email           String?
+  ocupacion       String?
+  direccion       String?
+  lugarTrabajo    String?
+  esPrincipal     Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  estudianteId Int
+  estudiante   Estudiante @relation(fields: [estudianteId], references: [id])
+}
+
+enum Parentesco {
+  PADRE
+  MADRE
+  TUTOR
+  ABUELO
+  ABUELA
+  TIO
+  TIA
+  HERMANO
+  HERMANA
+  OTRO
+}
+
+// ==================== MATRÍCULA ====================
+model Matricula {
+  id              Int             @id @default(autoincrement())
+  codigo          String          @unique
+  fechaMatricula  DateTime        @default(now())
+  estado          EstadoMatricula @default(ACTIVA)
+  tipoMatricula   TipoMatricula   @default(REGULAR)
+  procedencia     String?
+  observaciones   String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  estudianteId Int
+  estudiante   Estudiante @relation(fields: [estudianteId], references: [id])
+
+  seccionId Int
+  seccion   Seccion @relation(fields: [seccionId], references: [id])
+
+  anioEscolarId Int
+  anioEscolar   AnioEscolar @relation(fields: [anioEscolarId], references: [id])
+
+  @@unique([estudianteId, anioEscolarId])
+}
+
+enum EstadoMatricula {
+  ACTIVA
+  RETIRADO
+  TRASLADADO
+  FINALIZADA
+}
+
+enum TipoMatricula {
+  REGULAR
+  TRASLADO
+  REINGRESO
+}
+
+// ==================== ASISTENCIA ====================
+model Asistencia {
+  id           Int             @id @default(autoincrement())
+  fecha        DateTime
+  estado       EstadoAsistencia
+  horaEntrada  String?
+  horaSalida   String?
+  observacion  String?
+  justificado  Boolean         @default(false)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  estudianteId Int
+  estudiante   Estudiante @relation(fields: [estudianteId], references: [id])
+
+  anioEscolarId Int
+  anioEscolar   AnioEscolar @relation(fields: [anioEscolarId], references: [id])
+
+  @@unique([estudianteId, fecha])
+}
+
+enum EstadoAsistencia {
+  PRESENTE
+  AUSENTE
+  TARDANZA
+  JUSTIFICADO
+}
+
+// ==================== NOTAS Y CALIFICACIONES ====================
+model Nota {
+  id               Int             @id @default(autoincrement())
+  calificacion     String          // "AD", "A", "B", "C" o "20", "15", etc.
+  tipo             TipoCalificacion
+  descripcion      String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  estudianteId Int
+  estudiante   Estudiante @relation(fields: [estudianteId], references: [id])
+
+  cursoId Int
+  curso   Curso @relation(fields: [cursoId], references: [id])
+
+  competenciaId Int?
+  competencia   Competencia? @relation(fields: [competenciaId], references: [id])
+
+  periodoId Int
+  periodo   Periodo @relation(fields: [periodoId], references: [id])
+}
+
+enum TipoCalificacion {
+  LITERAL    // AD, A, B, C (Inicial y Primaria)
+  VIGESIMAL  // 0-20 (Secundaria)
+}
+
+// ==================== PAGOS ====================
+model ConceptoPago {
+  id          Int      @id @default(autoincrement())
+  nombre      String   @unique
+  descripcion String?
+  monto       Float
+  esRecurrente Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  pagos Pago[]
+}
+
+model Pago {
+  id              Int         @id @default(autoincrement())
+  numeroRecibo    String      @unique
+  monto           Float
+  montoPagado     Float
+  fechaVencimiento DateTime
+  fechaPago       DateTime?
+  estado          EstadoPago  @default(PENDIENTE)
+  metodoPago      MetodoPago?
+  observacion     String?
+  mes             Int?        // 1-12 para cuotas mensuales
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  estudianteId Int
+  estudiante   Estudiante @relation(fields: [estudianteId], references: [id])
+
+  conceptoId Int
+  concepto   ConceptoPago @relation(fields: [conceptoId], references: [id])
+
+  anioEscolarId Int
+  anioEscolar   AnioEscolar @relation(fields: [anioEscolarId], references: [id])
+}
+
+enum EstadoPago {
+  PENDIENTE
+  PAGADO
+  PARCIAL
+  VENCIDO
+  ANULADO
+}
+
+enum MetodoPago {
+  EFECTIVO
+  TRANSFERENCIA
+  TARJETA
+  YAPE
+  PLIN
+}
