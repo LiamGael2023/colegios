@@ -23,8 +23,28 @@
             </div>
         <?php endif; ?>
 
-        <form method="POST" autocomplete="off">
+        <form method="POST" enctype="multipart/form-data" autocomplete="off">
             <div class="row g-3">
+                <!-- Foto de perfil -->
+                <div class="col-md-12">
+                    <label class="form-label">Foto del Estudiante</label>
+                    <div class="row align-items-center">
+                        <?php if (!empty($est->foto)): ?>
+                            <div class="col-auto">
+                                <span class="avatar avatar-lg" style="background-image: url(<?= APP_URL ?>/uploads/fotos/<?= $est->foto ?>)"></span>
+                            </div>
+                            <div class="col">
+                                <input type="file" name="foto" class="form-control" accept="image/jpeg,image/png,image/jpg">
+                                <small class="form-hint">Deje vacío para mantener la foto actual</small>
+                            </div>
+                        <?php else: ?>
+                            <div class="col">
+                                <input type="file" name="foto" class="form-control" accept="image/jpeg,image/png,image/jpg">
+                                <small class="form-hint">Formatos permitidos: JPG, PNG. Tamaño máximo: 2MB</small>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
                 <div class="col-md-4">
                     <label class="form-label required">Nombres</label>
                     <input type="text" name="nombres" class="form-control" value="<?= $est->nombres ?>" required>

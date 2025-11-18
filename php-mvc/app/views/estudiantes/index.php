@@ -51,9 +51,13 @@
                             <td class="text-muted"><?= $est->codigo ?></td>
                             <td>
                                 <div class="d-flex py-1 align-items-center">
-                                    <span class="avatar avatar-sm bg-primary-lt me-2">
-                                        <?= strtoupper(substr($est->nombres, 0, 1)) ?>
-                                    </span>
+                                    <?php if (!empty($est->foto)): ?>
+                                        <span class="avatar avatar-sm me-2" style="background-image: url(<?= APP_URL ?>/uploads/fotos/<?= $est->foto ?>)"></span>
+                                    <?php else: ?>
+                                        <span class="avatar avatar-sm bg-primary-lt me-2">
+                                            <?= strtoupper(substr($est->nombres, 0, 1)) ?>
+                                        </span>
+                                    <?php endif; ?>
                                     <div class="flex-fill">
                                         <div class="font-weight-medium"><?= $est->apellido_paterno ?> <?= $est->apellido_materno ?></div>
                                         <div class="text-muted small"><?= $est->nombres ?></div>

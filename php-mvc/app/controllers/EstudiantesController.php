@@ -49,6 +49,22 @@ class EstudiantesController extends Controller {
                 'email' => $this->getPost('email')
             ];
 
+            // Procesar foto si se subió
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $foto = $this->subirFoto($_FILES['foto']);
+                if ($foto) {
+                    $formData['foto'] = $foto;
+                } else {
+                    $data['error'] = 'Error al subir la foto. Verifique formato y tamaño (máx 2MB).';
+                    $this->view('layouts/main', [
+                        'content' => 'estudiantes/crear',
+                        'data' => $data,
+                        'title' => 'Nuevo Estudiante'
+                    ]);
+                    return;
+                }
+            }
+
             $id = $this->estudianteModel->create($formData);
 
             if ($id) {
@@ -64,6 +80,29 @@ class EstudiantesController extends Controller {
             'data' => $data,
             'title' => 'Nuevo Estudiante'
         ]);
+    }
+
+    private function subirFoto($file) {
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        $maxSize = 2 * 1024 * 1024; // 2MB
+
+        if (!in_array($file['type'], $allowedTypes)) {
+            return false;
+        }
+
+        if ($file['size'] > $maxSize) {
+            return false;
+        }
+
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $filename = 'est_' . uniqid() . '.' . strtolower($extension);
+        $uploadPath = dirname(dirname(__DIR__)) . '/public/uploads/fotos/' . $filename;
+
+        if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+            return $filename;
+        }
+
+        return false;
     }
 
     public function ver($id = null) {
@@ -136,6 +175,29 @@ class EstudiantesController extends Controller {
                 'email' => $this->getPost('email'),
                 'observaciones' => $this->getPost('observaciones')
             ];
+
+            // Procesar foto si se subió una nueva
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $foto = $this->subirFoto($_FILES['foto']);
+                if ($foto) {
+                    // Eliminar foto anterior si existe
+                    if (!empty($estudiante->foto)) {
+                        $oldPath = dirname(dirname(__DIR__)) . '/public/uploads/fotos/' . $estudiante->foto;
+                        if (file_exists($oldPath)) {
+                            unlink($oldPath);
+                        }
+                    }
+                    $formData['foto'] = $foto;
+                } else {
+                    $data['error'] = 'Error al subir la foto. Verifique formato y tamaño (máx 2MB).';
+                    $this->view('layouts/main', [
+                        'content' => 'estudiantes/editar',
+                        'data' => $data,
+                        'title' => 'Editar Estudiante'
+                    ]);
+                    return;
+                }
+            }
 
             if ($this->estudianteModel->update($id, $formData)) {
                 $_SESSION['success'] = 'Estudiante actualizado correctamente';

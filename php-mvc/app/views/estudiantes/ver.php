@@ -14,9 +14,13 @@
     <div class="card-body">
         <div class="row align-items-center">
             <div class="col-auto">
-                <span class="avatar avatar-lg bg-primary-lt">
-                    <?= strtoupper(substr($est->nombres, 0, 1) . substr($est->apellido_paterno, 0, 1)) ?>
-                </span>
+                <?php if (!empty($est->foto)): ?>
+                    <span class="avatar avatar-xl" style="background-image: url(<?= APP_URL ?>/uploads/fotos/<?= $est->foto ?>)"></span>
+                <?php else: ?>
+                    <span class="avatar avatar-xl bg-primary-lt">
+                        <?= strtoupper(substr($est->nombres, 0, 1) . substr($est->apellido_paterno, 0, 1)) ?>
+                    </span>
+                <?php endif; ?>
             </div>
             <div class="col">
                 <h2 class="mb-1"><?= $est->apellido_paterno ?> <?= $est->apellido_materno ?>, <?= $est->nombres ?></h2>

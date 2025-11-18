@@ -11,8 +11,14 @@
             </div>
         <?php endif; ?>
 
-        <form method="POST" autocomplete="off">
+        <form method="POST" enctype="multipart/form-data" autocomplete="off">
             <div class="row g-3">
+                <!-- Foto de perfil -->
+                <div class="col-md-12">
+                    <label class="form-label">Foto del Estudiante</label>
+                    <input type="file" name="foto" class="form-control" accept="image/jpeg,image/png,image/jpg">
+                    <small class="form-hint">Formatos permitidos: JPG, PNG. Tamaño máximo: 2MB</small>
+                </div>
                 <div class="col-md-4">
                     <label class="form-label required">Nombres</label>
                     <input type="text" name="nombres" class="form-control" required>

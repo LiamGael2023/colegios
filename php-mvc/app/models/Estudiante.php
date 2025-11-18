@@ -69,10 +69,10 @@ class Estudiante {
 
         $this->db->query('INSERT INTO estudiantes (codigo, dni, nombres, apellido_paterno, apellido_materno,
                          fecha_nacimiento, genero, direccion, telefono, email, lugar_nacimiento,
-                         nacionalidad, lengua, religion, tipo_sangre, alergias, discapacidad, observaciones)
+                         nacionalidad, lengua, religion, tipo_sangre, alergias, discapacidad, observaciones, foto)
                          VALUES (:codigo, :dni, :nombres, :apellido_paterno, :apellido_materno,
                          :fecha_nacimiento, :genero, :direccion, :telefono, :email, :lugar_nacimiento,
-                         :nacionalidad, :lengua, :religion, :tipo_sangre, :alergias, :discapacidad, :observaciones)');
+                         :nacionalidad, :lengua, :religion, :tipo_sangre, :alergias, :discapacidad, :observaciones, :foto)');
 
         $this->db->bind(':codigo', $codigo);
         $this->db->bind(':dni', $data['dni']);
@@ -92,6 +92,7 @@ class Estudiante {
         $this->db->bind(':alergias', $data['alergias'] ?? '');
         $this->db->bind(':discapacidad', $data['discapacidad'] ?? '');
         $this->db->bind(':observaciones', $data['observaciones'] ?? '');
+        $this->db->bind(':foto', $data['foto'] ?? null);
 
         if ($this->db->execute()) {
             return $this->db->lastInsertId();
@@ -100,11 +101,19 @@ class Estudiante {
     }
 
     public function update($id, $data) {
-        $this->db->query('UPDATE estudiantes SET dni = :dni, nombres = :nombres,
-                         apellido_paterno = :apellido_paterno, apellido_materno = :apellido_materno,
-                         fecha_nacimiento = :fecha_nacimiento, genero = :genero, direccion = :direccion,
-                         telefono = :telefono, email = :email, observaciones = :observaciones
-                         WHERE id = :id');
+        $sql = 'UPDATE estudiantes SET dni = :dni, nombres = :nombres,
+                apellido_paterno = :apellido_paterno, apellido_materno = :apellido_materno,
+                fecha_nacimiento = :fecha_nacimiento, genero = :genero, direccion = :direccion,
+                telefono = :telefono, email = :email, observaciones = :observaciones';
+
+        // Agregar foto solo si se proporciona
+        if (isset($data['foto'])) {
+            $sql .= ', foto = :foto';
+        }
+
+        $sql .= ' WHERE id = :id';
+
+        $this->db->query($sql);
 
         $this->db->bind(':id', $id);
         $this->db->bind(':dni', $data['dni']);
@@ -117,6 +126,10 @@ class Estudiante {
         $this->db->bind(':telefono', $data['telefono'] ?? '');
         $this->db->bind(':email', $data['email'] ?? '');
         $this->db->bind(':observaciones', $data['observaciones'] ?? '');
+
+        if (isset($data['foto'])) {
+            $this->db->bind(':foto', $data['foto']);
+        }
 
         return $this->db->execute();
     }
