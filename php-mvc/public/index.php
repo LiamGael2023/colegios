@@ -1,9 +1,10 @@
 <?php
+// Cargar configuración primero
+require_once '../config/config.php';
+
+// Iniciar sesión
 session_name(SESSION_NAME);
 session_start();
-
-// Cargar configuración
-require_once '../config/config.php';
 
 // Autoload de clases core
 require_once APP_ROOT . '/core/Database.php';

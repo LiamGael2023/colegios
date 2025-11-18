@@ -3,6 +3,7 @@
  * Configuración de la base de datos
  */
 define('DB_HOST', 'localhost');
+define('DB_PORT', '3307');  // Puerto de MySQL
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'sistema_escolar');
@@ -11,7 +12,7 @@ define('DB_NAME', 'sistema_escolar');
  * Configuración de la aplicación
  */
 define('APP_NAME', 'Sistema de Gestión Escolar');
-define('APP_URL', 'http://localhost/colegios/php-mvc/public');
+define('APP_URL', 'http://localhost/sistema-escolar/php-mvc/public');
 define('APP_ROOT', dirname(dirname(__FILE__)));
 
 /**
