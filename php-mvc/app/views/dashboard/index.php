@@ -1,68 +1,80 @@
-<div class="row row-deck row-cards">
-    <div class="col-sm-6 col-lg-3">
-        <div class="card">
+<div class="row row-deck row-cards fade-in">
+    <div class="col-6 col-sm-6 col-lg-3">
+        <div class="card stat-card">
             <div class="card-body">
                 <div class="d-flex align-items-center">
-                    <div class="subheader">Total Estudiantes</div>
-                </div>
-                <div class="h1 mb-3"><?= $data['totalEstudiantes'] ?></div>
-                <div class="d-flex mb-2">
-                    <div>
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                            <i class="ti ti-users me-1"></i> Registrados
-                        </span>
+                    <div class="stat-icon bg-primary-lt text-primary me-3">
+                        <i class="ti ti-users"></i>
                     </div>
+                    <div>
+                        <div class="text-muted small text-uppercase fw-semibold">Estudiantes</div>
+                        <div class="h2 mb-0"><?= $data['totalEstudiantes'] ?></div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <span class="badge bg-primary-lt">
+                        <i class="ti ti-check me-1"></i>Registrados
+                    </span>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-lg-3">
-        <div class="card">
+    <div class="col-6 col-sm-6 col-lg-3">
+        <div class="card stat-card">
             <div class="card-body">
                 <div class="d-flex align-items-center">
-                    <div class="subheader">Matriculados</div>
-                </div>
-                <div class="h1 mb-3"><?= $data['totalMatriculas'] ?></div>
-                <div class="d-flex mb-2">
-                    <div>
-                        <span class="text-blue d-inline-flex align-items-center lh-1">
-                            <i class="ti ti-user-check me-1"></i> Activos
-                        </span>
+                    <div class="stat-icon bg-success-lt text-success me-3">
+                        <i class="ti ti-user-check"></i>
                     </div>
+                    <div>
+                        <div class="text-muted small text-uppercase fw-semibold">Matriculados</div>
+                        <div class="h2 mb-0"><?= $data['totalMatriculas'] ?></div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <span class="badge bg-success-lt">
+                        <i class="ti ti-circle-check me-1"></i>Activos
+                    </span>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-lg-3">
-        <div class="card">
+    <div class="col-6 col-sm-6 col-lg-3">
+        <div class="card stat-card">
             <div class="card-body">
                 <div class="d-flex align-items-center">
-                    <div class="subheader">Pagos Pendientes</div>
-                </div>
-                <div class="h1 mb-3"><?= $data['pagosPendientes'] ?></div>
-                <div class="d-flex mb-2">
-                    <div>
-                        <span class="text-yellow d-inline-flex align-items-center lh-1">
-                            <i class="ti ti-alert-triangle me-1"></i> Por cobrar
-                        </span>
+                    <div class="stat-icon bg-warning-lt text-warning me-3">
+                        <i class="ti ti-alert-triangle"></i>
                     </div>
+                    <div>
+                        <div class="text-muted small text-uppercase fw-semibold">Pendientes</div>
+                        <div class="h2 mb-0"><?= $data['pagosPendientes'] ?></div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <span class="badge bg-warning-lt">
+                        <i class="ti ti-clock me-1"></i>Por cobrar
+                    </span>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-lg-3">
-        <div class="card">
+    <div class="col-6 col-sm-6 col-lg-3">
+        <div class="card stat-card">
             <div class="card-body">
                 <div class="d-flex align-items-center">
-                    <div class="subheader">Ingresos Totales</div>
-                </div>
-                <div class="h1 mb-3">S/ <?= number_format($data['ingresosTotales'], 2) ?></div>
-                <div class="d-flex mb-2">
-                    <div>
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                            <i class="ti ti-cash me-1"></i> Recaudado
-                        </span>
+                    <div class="stat-icon bg-teal-lt text-teal me-3">
+                        <i class="ti ti-cash"></i>
                     </div>
+                    <div>
+                        <div class="text-muted small text-uppercase fw-semibold">Ingresos</div>
+                        <div class="h2 mb-0">S/ <?= number_format($data['ingresosTotales'], 0) ?></div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <span class="badge bg-teal-lt">
+                        <i class="ti ti-trending-up me-1"></i>Recaudado
+                    </span>
                 </div>
             </div>
         </div>
@@ -105,39 +117,45 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">
-                    <i class="ti ti-bolt me-2"></i>Accesos Rápidos
+                    <i class="ti ti-bolt me-2 text-warning"></i>Accesos Rápidos
                 </h3>
             </div>
             <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-6">
-                        <a href="<?= APP_URL ?>/estudiantes/crear" class="btn btn-outline-primary w-100">
-                            <i class="ti ti-user-plus me-1"></i> Nuevo Estudiante
+                <div class="row g-2">
+                    <div class="col-6 col-md-4">
+                        <a href="<?= APP_URL ?>/estudiantes/crear" class="btn btn-outline-primary w-100 d-flex flex-column align-items-center py-3">
+                            <i class="ti ti-user-plus fs-2 mb-1"></i>
+                            <span class="small">Nuevo Estudiante</span>
                         </a>
                     </div>
-                    <div class="col-6">
-                        <a href="<?= APP_URL ?>/notas" class="btn btn-outline-success w-100">
-                            <i class="ti ti-notebook me-1"></i> Ingresar Notas
+                    <div class="col-6 col-md-4">
+                        <a href="<?= APP_URL ?>/notas" class="btn btn-outline-success w-100 d-flex flex-column align-items-center py-3">
+                            <i class="ti ti-notebook fs-2 mb-1"></i>
+                            <span class="small">Ingresar Notas</span>
                         </a>
                     </div>
-                    <div class="col-6">
-                        <a href="<?= APP_URL ?>/asistencia" class="btn btn-outline-info w-100">
-                            <i class="ti ti-calendar-check me-1"></i> Tomar Asistencia
+                    <div class="col-6 col-md-4">
+                        <a href="<?= APP_URL ?>/asistencia" class="btn btn-outline-info w-100 d-flex flex-column align-items-center py-3">
+                            <i class="ti ti-calendar-check fs-2 mb-1"></i>
+                            <span class="small">Tomar Asistencia</span>
                         </a>
                     </div>
-                    <div class="col-6">
-                        <a href="<?= APP_URL ?>/pagos/nuevo" class="btn btn-outline-warning w-100">
-                            <i class="ti ti-credit-card me-1"></i> Registrar Pago
+                    <div class="col-6 col-md-4">
+                        <a href="<?= APP_URL ?>/pagos/nuevo" class="btn btn-outline-warning w-100 d-flex flex-column align-items-center py-3">
+                            <i class="ti ti-credit-card fs-2 mb-1"></i>
+                            <span class="small">Registrar Pago</span>
                         </a>
                     </div>
-                    <div class="col-6">
-                        <a href="<?= APP_URL ?>/reportes/consolidado" class="btn btn-outline-secondary w-100">
-                            <i class="ti ti-file-text me-1"></i> Consolidado Notas
+                    <div class="col-6 col-md-4">
+                        <a href="<?= APP_URL ?>/reportes/consolidado" class="btn btn-outline-secondary w-100 d-flex flex-column align-items-center py-3">
+                            <i class="ti ti-file-text fs-2 mb-1"></i>
+                            <span class="small">Consolidado</span>
                         </a>
                     </div>
-                    <div class="col-6">
-                        <a href="<?= APP_URL ?>/pagos/morosidad" class="btn btn-outline-danger w-100">
-                            <i class="ti ti-alert-circle me-1"></i> Morosidad
+                    <div class="col-6 col-md-4">
+                        <a href="<?= APP_URL ?>/pagos/morosidad" class="btn btn-outline-danger w-100 d-flex flex-column align-items-center py-3">
+                            <i class="ti ti-alert-circle fs-2 mb-1"></i>
+                            <span class="small">Morosidad</span>
                         </a>
                     </div>
                 </div>
