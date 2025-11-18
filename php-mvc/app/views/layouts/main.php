@@ -122,6 +122,9 @@
                                 <a class="dropdown-item" href="<?= APP_URL ?>/usuarios">
                                     Usuarios del Sistema
                                 </a>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/docentes">
+                                    <i class="ti ti-chalkboard me-1"></i>Docentes
+                                </a>
                                 <div class="dropdown-divider"></div>
                                 <span class="dropdown-header">Configuración Académica</span>
                                 <a class="dropdown-item" href="<?= APP_URL ?>/configuracion/anios">
@@ -135,6 +138,9 @@
                                 </a>
                                 <a class="dropdown-item" href="<?= APP_URL ?>/configuracion/cursos">
                                     Cursos
+                                </a>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/configuracion/areas">
+                                    Áreas Curriculares
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="<?= APP_URL ?>/configuracion/institucion">

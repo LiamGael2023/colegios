@@ -164,6 +164,82 @@ class ConfiguracionController extends Controller {
         ]);
     }
 
+    // ========== ÁREAS CURRICULARES ==========
+    public function areas() {
+        $areas = $this->academicoModel->getAreas();
+
+        $this->view('layouts/main', [
+            'content' => 'configuracion/areas/index',
+            'data' => ['areas' => $areas],
+            'title' => 'Áreas Curriculares'
+        ]);
+    }
+
+    public function crearArea() {
+        $data = ['error' => ''];
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $nombre = $this->getPost('nombre');
+            $descripcion = $this->getPost('descripcion');
+
+            if ($this->academicoModel->crearArea($nombre, $descripcion)) {
+                $_SESSION['success'] = 'Área curricular creada correctamente';
+                $this->redirect('configuracion/areas');
+            } else {
+                $data['error'] = 'Error al crear área curricular';
+            }
+        }
+
+        $this->view('layouts/main', [
+            'content' => 'configuracion/areas/crear',
+            'data' => $data,
+            'title' => 'Nueva Área Curricular'
+        ]);
+    }
+
+    public function editarArea($id = null) {
+        if (!$id) {
+            $this->redirect('configuracion/areas');
+        }
+
+        $area = $this->academicoModel->getAreaById($id);
+        if (!$area) {
+            $_SESSION['error'] = 'Área no encontrada';
+            $this->redirect('configuracion/areas');
+        }
+
+        $data = ['area' => $area, 'error' => ''];
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $nombre = $this->getPost('nombre');
+            $descripcion = $this->getPost('descripcion');
+
+            if ($this->academicoModel->actualizarArea($id, $nombre, $descripcion)) {
+                $_SESSION['success'] = 'Área curricular actualizada';
+                $this->redirect('configuracion/areas');
+            } else {
+                $data['error'] = 'Error al actualizar área';
+            }
+        }
+
+        $this->view('layouts/main', [
+            'content' => 'configuracion/areas/editar',
+            'data' => $data,
+            'title' => 'Editar Área Curricular'
+        ]);
+    }
+
+    public function eliminarArea($id = null) {
+        if ($id) {
+            if ($this->academicoModel->eliminarArea($id)) {
+                $_SESSION['success'] = 'Área curricular eliminada';
+            } else {
+                $_SESSION['error'] = 'No se puede eliminar el área (tiene cursos asociados)';
+            }
+        }
+        $this->redirect('configuracion/areas');
+    }
+
     // ========== INSTITUCIÓN ==========
     public function institucion() {
         $institucion = $this->academicoModel->getInstitucion();

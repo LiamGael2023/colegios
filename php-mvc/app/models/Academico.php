@@ -175,6 +175,43 @@ class Academico {
         return $this->db->execute();
     }
 
+    // ========== CRUD ÁREAS CURRICULARES ==========
+    public function getAreaById($id) {
+        $this->db->query('SELECT * FROM areas_curriculares WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+
+    public function crearArea($nombre, $descripcion) {
+        $this->db->query('INSERT INTO areas_curriculares (nombre, descripcion) VALUES (:nombre, :descripcion)');
+        $this->db->bind(':nombre', $nombre);
+        $this->db->bind(':descripcion', $descripcion);
+        return $this->db->execute();
+    }
+
+    public function actualizarArea($id, $nombre, $descripcion) {
+        $this->db->query('UPDATE areas_curriculares SET nombre = :nombre, descripcion = :descripcion WHERE id = :id');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':nombre', $nombre);
+        $this->db->bind(':descripcion', $descripcion);
+        return $this->db->execute();
+    }
+
+    public function eliminarArea($id) {
+        // Verificar que no tenga cursos asociados
+        $this->db->query('SELECT COUNT(*) as total FROM cursos WHERE area_curricular_id = :id');
+        $this->db->bind(':id', $id);
+        $result = $this->db->single();
+
+        if ($result->total > 0) {
+            return false;
+        }
+
+        $this->db->query('DELETE FROM areas_curriculares WHERE id = :id');
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
+    }
+
     // ========== INSTITUCIÓN ==========
     public function actualizarInstitucion($nombre, $codigo, $direccion, $telefono, $email, $director, $ugel) {
         $this->db->query('UPDATE institucion SET nombre = :nombre, codigo_modular = :codigo,
