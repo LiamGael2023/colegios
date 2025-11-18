@@ -70,6 +70,37 @@
 </div>
 
 <div class="row row-deck row-cards mt-3">
+    <!-- Gráfico de Estudiantes por Nivel -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="ti ti-chart-pie me-2"></i>Estudiantes por Nivel
+                </h3>
+            </div>
+            <div class="card-body">
+                <canvas id="chartNiveles" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico de Ingresos por Mes -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="ti ti-chart-bar me-2"></i>Ingresos por Mes
+                </h3>
+            </div>
+            <div class="card-body">
+                <canvas id="chartIngresos" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row row-deck row-cards mt-3">
+    <!-- Accesos Rápidos -->
     <div class="col-lg-6">
         <div class="card">
             <div class="card-header">
@@ -95,13 +126,13 @@
                         </a>
                     </div>
                     <div class="col-6">
-                        <a href="<?= APP_URL ?>/pagos" class="btn btn-outline-warning w-100">
+                        <a href="<?= APP_URL ?>/pagos/nuevo" class="btn btn-outline-warning w-100">
                             <i class="ti ti-credit-card me-1"></i> Registrar Pago
                         </a>
                     </div>
                     <div class="col-6">
-                        <a href="<?= APP_URL ?>/reportes/libreta" class="btn btn-outline-secondary w-100">
-                            <i class="ti ti-file-text me-1"></i> Libreta de Notas
+                        <a href="<?= APP_URL ?>/reportes/consolidado" class="btn btn-outline-secondary w-100">
+                            <i class="ti ti-file-text me-1"></i> Consolidado Notas
                         </a>
                     </div>
                     <div class="col-6">
@@ -113,6 +144,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Información del Sistema -->
     <div class="col-lg-6">
         <div class="card">
             <div class="card-header">
@@ -143,11 +176,95 @@
                         </div>
                     </div>
                     <div class="datagrid-item">
-                        <div class="datagrid-title">Total Profesores</div>
+                        <div class="datagrid-title">Profesores</div>
                         <div class="datagrid-content"><?= $data['totalProfesores'] ?></div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Apoderados</div>
+                        <div class="datagrid-content"><?= $data['totalApoderados'] ?></div>
+                    </div>
+                    <div class="datagrid-item">
+                        <div class="datagrid-title">Fecha</div>
+                        <div class="datagrid-content"><?= date('d/m/Y') ?></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+// Datos para gráficos
+<?php
+$nivelesLabels = [];
+$nivelesData = [];
+foreach ($data['estudiantesPorNivel'] as $nivel) {
+    $nivelesLabels[] = $nivel->nombre;
+    $nivelesData[] = $nivel->total;
+}
+
+$meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+$ingresosData = array_fill(0, 12, 0);
+foreach ($data['ingresosPorMes'] as $ing) {
+    $ingresosData[$ing->mes - 1] = floatval($ing->total);
+}
+?>
+
+// Gráfico de Estudiantes por Nivel
+new Chart(document.getElementById('chartNiveles'), {
+    type: 'doughnut',
+    data: {
+        labels: <?= json_encode($nivelesLabels) ?>,
+        datasets: [{
+            data: <?= json_encode($nivelesData) ?>,
+            backgroundColor: ['#206bc4', '#4299e1', '#94d3a2'],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Gráfico de Ingresos por Mes
+new Chart(document.getElementById('chartIngresos'), {
+    type: 'bar',
+    data: {
+        labels: <?= json_encode($meses) ?>,
+        datasets: [{
+            label: 'Ingresos (S/)',
+            data: <?= json_encode($ingresosData) ?>,
+            backgroundColor: '#206bc4',
+            borderRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return 'S/ ' + value.toLocaleString();
+                    }
+                }
+            }
+        }
+    }
+});
+</script>

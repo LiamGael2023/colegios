@@ -58,6 +58,10 @@
                                 <a class="dropdown-item" href="<?= APP_URL ?>/estudiantes/crear">
                                     Nuevo Estudiante
                                 </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="<?= APP_URL ?>/apoderados">
+                                    <i class="ti ti-users-group me-1"></i>Apoderados
+                                </a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
